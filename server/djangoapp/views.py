@@ -2,7 +2,7 @@
 
 # from django.shortcuts import render
 # from django.http import HttpResponseRedirect, HttpResponse
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 # from django.shortcuts import get_object_or_404, render, redirect
 # from django.contrib.auth import logout
 # from django.contrib import messages
@@ -46,7 +46,7 @@ def logout_request(request):
 # Create a `registration` view to handle sign up request
 # @csrf_exempt
 def registration(request):
-    data = json.loads(requset.body)
+    data = json.loads(request.body)
     username= data['userName']
     password= data['password']
 
@@ -63,7 +63,7 @@ def registration(request):
 
     if not username_exist:
         user = User.objects.create_user(username=username, first_name=name, last_name=surname, password=password, email=email)
-        login(reques, user)
+        login(request, user)
         data = {"userName":username,"status":"Authenticated"}
         return JsonResponse(data)
     else:
