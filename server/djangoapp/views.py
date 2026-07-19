@@ -95,18 +95,33 @@ def get_dealerships(request, state="All"):
 
 
 # Create a `get_dealer_reviews` view to render the reviews of a dealer
-def get_dealer_reviews(request,dealer_id):
-    # if dealer id has been provided
-    if(dealer_id):
-        endpoint = "/fetchReviews/dealer/"+str(dealer_id)
+def get_dealer_reviews(request, dealer_id):
+    if dealer_id:
+        endpoint = "/fetchReviews/dealer/" + str(dealer_id)
         reviews = get_request(endpoint)
-        for review_detail in reviews:
-            response = analyze_review_sentiments(review_detail['review'])
-            print(response)
-            review_detail['sentiment'] = response['sentiment']
-        return JsonResponse({"status":200,"reviews":reviews})
+        
+        if reviews and isinstance(reviews, list):
+            for review_detail in reviews:
+                review_text = review_detail.get('review')
+                if review_text:
+                    response = analyze_review_sentiments(review_text)
+                    print(response)
+                    
+                    # FIX: Safely check if response exists before calling .get()
+                    if response is not None and isinstance(response, dict):
+                        review_detail['sentiment'] = response.get('sentiment', 'Neutral')
+                    else:
+                        # Fallback if Watson service fails or returns None
+                        review_detail['sentiment'] = 'Neutral'
+                else:
+                    review_detail['sentiment'] = 'Neutral'
+            return JsonResponse({"status": 200, "reviews": reviews})
+        else:
+            return JsonResponse({"status": 200, "reviews": [], "message": "No reviews found"})
     else:
-        return JsonResponse({"status":400,"message":"Bad Request"})
+        return JsonResponse({"status": 400, "message": "Bad Request"})
+
+
 
 # Create a `get_dealer_details` view to render the dealer details
 def get_dealer_details(request, dealer_id):
