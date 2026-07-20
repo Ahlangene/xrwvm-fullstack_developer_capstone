@@ -50,5 +50,5 @@ jobs:
     - name: Run Linter
       run: |
         # Configured to support ES8 (async/await, const, let, arrow functions)
-        jshint ./server/database/ --env:es8 --sub=true
+        jshint ./server/database/ --esversion=8 --sub=true
         echo "Linted all the js files successfully"
