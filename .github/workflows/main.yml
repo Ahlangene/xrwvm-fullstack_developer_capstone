@@ -18,7 +18,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11' # Aligned to your local project development version
+        python-version: '3.11'
 
     - name: Install Dependencies
       run: |
@@ -27,7 +27,6 @@ jobs:
 
     - name: Run Linter
       run: |
-        # Directly calling flake8 ensures failures block code integration
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
@@ -42,13 +41,13 @@ jobs:
     - name: Install Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18' # Modern LTS Node runtime engine
+        node-version: '18'
 
     - name: Install JSHint
       run: npm install jshint --global
 
     - name: Run Linter
       run: |
-        # Explicit directory scan targeting your data backend layers 
-        jshint ./server/database/
-        echo "Linted all the JS files successfully"
+        # Configured inline to accept ES8 syntax and ignore strict dot-notation warnings
+        jshint ./server/database/ --esversion=8 --sub=true
+        echo "Linted all the js files successfully"
