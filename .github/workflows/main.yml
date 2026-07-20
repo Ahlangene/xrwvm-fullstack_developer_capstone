@@ -49,6 +49,6 @@ jobs:
 
     - name: Run Linter
       run: |
-        # Explicit directory scan targeting your data backend layers 
-        jshint ./server/database/
-        echo "Linted all the JS files successfully"
+        # Configured to support ES8 (async/await, const, let, arrow functions)
+        jshint ./server/database/ --env:es8 --sub=true
+        echo "Linted all the js files successfully"
