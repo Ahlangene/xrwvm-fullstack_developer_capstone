@@ -1,0 +1,8 @@
+.dockerignore
+djangoenv/
+.git/
+.github/
+db.sqlite3
+frontend/node_modules/
+__pycache__/
+*.pyc
