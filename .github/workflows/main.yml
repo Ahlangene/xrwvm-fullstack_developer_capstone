@@ -49,6 +49,9 @@ jobs:
 
     - name: Run Linter
       run: |
-        # Configured to support ES8 (async/await, const, let, arrow functions)
-        jshint ./server/database/ --esversion=8 --sub=true
+        # 1. Dynamically write configuration values into a local .jshintrc file
+        echo '{ "esversion": 8, "sub": true }' > .jshintrc
+        
+        # 2. Run JSHint cleanly (it automatically reads the .jshintrc file rules)
+        jshint ./server/database/
         echo "Linted all the js files successfully"
